@@ -7,6 +7,6 @@ import service.ItemService;
 public class Demo {
     public static void main(String[] args) throws Exception {
 
-        System.out.println(new ItemController(new ItemService(new ItemDAO())).getById(1));
+        System.out.println(new ItemController(new ItemService(new ItemDAO(), 100)).getById(1));
     }
 }

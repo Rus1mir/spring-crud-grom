@@ -3,6 +3,7 @@ package servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.ItemController;
 import dao.ItemDAO;
+import exception.BadRequestException;
 import exception.NotFoundException;
 import model.Item;
 import org.hibernate.HibernateException;
@@ -17,7 +18,7 @@ import java.util.Date;
 
 public class MyServlet extends HttpServlet {
 
-    ItemController controller = new ItemController(new ItemService(new ItemDAO()));
+    ItemController controller = new ItemController(new ItemService(new ItemDAO(), 100));
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -27,16 +28,22 @@ public class MyServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             Long id = Long.parseLong(req.getParameter("id"));
 
+            resp.setStatus(200);
             mapper.writeValue(resp.getWriter(), controller.getById(id));
 
         } catch (NumberFormatException e) {
 
+            resp.setStatus(400);
             resp.getWriter().println("Id param must be a number like 'id = 1'");
+
         } catch (NotFoundException e) {
 
+            resp.setStatus(404);
             resp.getWriter().println(e.getMessage());
+
         } catch (HibernateException e) {
 
+            resp.setStatus(500);
             resp.getWriter().println("Internal server Error");
         }
     }
@@ -48,9 +55,18 @@ public class MyServlet extends HttpServlet {
 
             Item item = getItem(req);
             controller.save(item);
+
+            resp.setStatus(201);
             resp.getWriter().println("Item id: " + item.getId() + " is successfully saved");
 
+        } catch (BadRequestException e) {
+
+            resp.setStatus(400);
+            resp.getWriter().println("Saving item filed !" + e.getMessage());
+
         } catch (Exception e) {
+
+            resp.setStatus(500);
             resp.getWriter().println("Saving item filed !" + e.getMessage());
         }
     }
@@ -63,9 +79,17 @@ public class MyServlet extends HttpServlet {
             Item item = getItem(req);
             controller.update(item);
 
+            resp.setStatus(200);
             resp.getWriter().println("Item id: " + item.getId() + " is successfully updated");
 
+        } catch (BadRequestException e) {
+
+            resp.setStatus(400);
+            resp.getWriter().println("Saving item filed !" + e.getMessage());
+
         } catch (Exception e) {
+
+            resp.setStatus(500);
             resp.getWriter().println("Update item filed !" + e.getMessage());
         }
     }
@@ -77,17 +101,25 @@ public class MyServlet extends HttpServlet {
 
             Long id = Long.parseLong(req.getParameter("id"));
             controller.delete(id);
+
+            resp.setStatus(200);
             resp.getWriter().println("Item id: " + id + " was deleted successfully");
 
         } catch (NumberFormatException e) {
 
+            resp.setStatus(400);
             resp.getWriter().println("Id param must be a number like 'id = 1'");
+
         } catch (EntityNotFoundException e) {
 
+            resp.setStatus(404);
             resp.getWriter().println(e.getMessage());
+
         } catch (HibernateException e) {
 
+            resp.setStatus(500);
             resp.getWriter().println("Deleting item was filed");
+
         }
     }
 
