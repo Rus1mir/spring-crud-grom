@@ -1,4 +1,4 @@
-package model;
+package com.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -75,7 +75,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "model.Item{" + "\n" +
+        return "com.model.Item{" + "\n" +
                 "id= " + id + "\n" +
                 "name= " + name +  "\n" +
                 "dateCreated= " + dateCreated + "\n" +

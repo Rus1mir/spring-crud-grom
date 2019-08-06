@@ -18,10 +18,36 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <webResources>
+                        <resources>
+                            <directory>web</directory>
+                            <includes>
+                                <include>**/*.*
+                                </include><!--this line includes the xml files into the war, which will be found when it is exploded in server during deployment -->
+                            </includes>
+                            <excludes>
+                                <exclude>*.java</exclude>
+                            </excludes>
+                        </resources>
+                    </webResources>
+                    <webXml>web/WEB-INF/web.xml</webXml>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.0.6.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
@@ -31,12 +57,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.4.3.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

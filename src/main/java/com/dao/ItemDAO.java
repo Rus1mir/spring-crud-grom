@@ -1,7 +1,7 @@
-package dao;
+package com.dao;
 
-import exception.NotFoundException;
-import model.Item;
+import com.exception.NotFoundException;
+import com.model.Item;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
